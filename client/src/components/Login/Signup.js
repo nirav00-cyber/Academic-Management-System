@@ -1,10 +1,10 @@
 import React,{useState,useRef} from 'react'
 import classes from "./Signup.module.css";
-
+import { useAuth } from '../../lib/AuthContext';
+import { useNavigate } from 'react-router-dom';
 function Signup(props)
 {
 
-    const [isLogin, setIsLogin] = useState(true);
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
@@ -12,10 +12,36 @@ function Signup(props)
     const emailRef = useRef();
     const passwordRef = useRef();
     const passwordConfirmRef = useRef();
+    const contactNumberRef = useRef();
+    const addressRef = useRef();
+    const navigate = useNavigate();
+    const { registerUser } = useAuth();
 
-    const submitHandler = (e) =>
+    const submitHandler = async(e) =>
     {
-        
+        e.preventDefault();
+        setIsLoading(true);
+        const signupInfo = {
+            name: nameRef.current.value,
+            email: emailRef.current.value,
+            password: passwordRef.current.value,
+            contactNumber: contactNumberRef.current.value,
+            address:addressRef.current.value
+        };
+
+            console.log("request made");
+            const data = await registerUser(signupInfo);
+        console.log(data);
+        if (data.status === 'ok')
+        {
+            navigate('/courses');
+            // redirect to home page
+            // toggleLoginModeHandler(); 
+        }
+        if (data.status === 'error')
+            setError("Error: Invalid credentials");
+        setIsLoading(false);
+
     }
     const toggleLoginModeHandler = () =>
     {
@@ -51,7 +77,7 @@ function Signup(props)
                         placeholder='Enter Password' ref={passwordRef}
                     required/>
 
-                </div>
+               </div>
                <div className={classes.form_control}>
                     <label htmlFor='confirm-password'>Confirm Password</label>
                     <input
@@ -65,7 +91,7 @@ function Signup(props)
                     <input
                         type='number'
                         id='contact_num'
-                        placeholder='Enter Contact Number' ref={passwordConfirmRef}
+                        placeholder='Enter Contact Number' ref={contactNumberRef}
                         required />
               </div>
             <div className={classes.form_control}>
@@ -73,7 +99,7 @@ function Signup(props)
                     <textarea
                         type='text'
                         id='address'
-                        placeholder='Enter Address' ref={passwordConfirmRef}
+                        placeholder='Enter Address' ref={addressRef}
                         required />
                 </div>
                 <button disabled={isLoading} type='submit' className={classes.btn}>

@@ -4,7 +4,7 @@ import classes from "./Login.module.css";
 function Login(props)
 {
 
-    const [isLogin, setIsLogin] = useState(true);
+    
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
