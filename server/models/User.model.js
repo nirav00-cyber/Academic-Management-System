@@ -21,7 +21,9 @@ const UserSchema = new mongoose.Schema({
     address: {
         type: String,
         required: true
-    }
+    },
+    coursesTaken: [],
+    
 });
 
 const UserModel = mongoose.model("User", UserSchema);

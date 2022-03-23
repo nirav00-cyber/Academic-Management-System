@@ -41,13 +41,19 @@ coursesRouter.get('/:courseId', (req, res) =>
 })
 
 
-coursesRouter.post('/', async(req, res) =>
+coursesRouter.post('/addNewCourse', async(req, res) =>
 {
-     const details = req.body;
-    const newCourse = new CourseModel(details);
-    await newCourse.save();
-    
-    res.json(details);
+    try
+    {
+        const details = req.body;
+        const newCourse = new CourseModel(details);
+        await newCourse.save();
+        res.json(details);
+    }
+    catch (err)
+    {
+        res.json({ status: "error", error: err });
+    }
 });
 
 
