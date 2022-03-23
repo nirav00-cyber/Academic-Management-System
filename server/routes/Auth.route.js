@@ -4,7 +4,25 @@ const UserModel = require('../models/User.model');
 const AuthRouter = express.Router();
 
 
+AuthRouter.post('/loginUser', async (req, res) =>
+{
+        const user = await UserModel.findOne({
+            email: req.body.email,
+            password: req.body.password
+        });
 
+        if (user)
+        {
+            return res.json({ status: 'ok', user: true });
+
+        }
+        else
+        {
+            res.json({ status: 'error', user: false });    
+        }
+
+    
+})
 
 AuthRouter.post('/registerUser', async(req, res) =>
 {

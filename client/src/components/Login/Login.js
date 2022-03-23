@@ -1,12 +1,15 @@
 import React,{useState,useRef} from 'react'
 import classes from "./Login.module.css";
-
+import { useAuth } from '../../lib/AuthContext';
+import { useNavigate } from 'react-router-dom';
 function Login(props)
 {
 
     
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const { loginUser } = useAuth();
+    const navigate = useNavigate();
 
 
     const emailRef = useRef();
@@ -17,9 +20,43 @@ function Login(props)
         props.toggleMode("login");
     }
 
-    const submitHandler = (e) =>
+   
+    const submitHandler = async(e) =>
     {
-        
+        e.preventDefault();
+      
+        const loginInfo = {
+           
+            email: emailRef.current.value,
+            password: passwordRef.current.value
+           
+        };
+
+        console.log("login request made");
+        let data = { status: "null" };
+        try
+        {  setIsLoading(true);
+            data = await loginUser(loginInfo);
+            console.log(data);
+             setIsLoading(false); 
+            if (data.status === 'ok')
+            {
+                navigate('/courses');
+                // redirect to home page
+                // toggleLoginModeHandler(); 
+            }
+        }
+        catch (err)
+        {
+                 setIsLoading(false); 
+
+            if (data.status === 'error')
+                setError("Error: Invalid credentials");
+            else
+                setError("Error occured ! try again");
+            console.log(err);
+        }
+       
     }
 
   return (

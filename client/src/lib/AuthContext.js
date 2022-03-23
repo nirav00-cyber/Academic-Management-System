@@ -21,9 +21,21 @@ export function AuthProvider(props)
         // console.log(data);
         
     }
-    
+    async function loginUser(loginInfo)
+    {
+        
+
+        const  response = await Axios.post("http://localhost:3001/auth/loginUser", loginInfo);
+        
+        console.log(response);
+        return response.data;
+        // const data = await response.json();
+        // console.log(data);
+        
+    }
  const value = {
-    registerUser,
+     registerUser,
+     loginUser
     }
     return (
         <AuthContext.Provider value={value}>

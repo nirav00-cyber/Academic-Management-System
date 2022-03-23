@@ -20,7 +20,7 @@ function Signup(props)
     const submitHandler = async(e) =>
     {
         e.preventDefault();
-        setIsLoading(true);
+        
         const signupInfo = {
             name: nameRef.current.value,
             email: emailRef.current.value,
@@ -29,8 +29,10 @@ function Signup(props)
             address:addressRef.current.value
         };
 
-            console.log("request made");
-            const data = await registerUser(signupInfo);
+        console.log("request made");
+        setIsLoading(true);
+        const data = await registerUser(signupInfo);
+        setIsLoading(false);
         console.log(data);
         if (data.status === 'ok')
         {
@@ -40,7 +42,7 @@ function Signup(props)
         }
         if (data.status === 'error')
             setError("Error: Invalid credentials");
-        setIsLoading(false);
+        // setIsLoading(false);
 
     }
     const toggleLoginModeHandler = () =>
