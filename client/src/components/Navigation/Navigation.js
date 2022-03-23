@@ -93,6 +93,12 @@ const ResponsiveAppBar = () => {
                   <Typography textAlign="center">Login</Typography>
                 </MenuItem>
               </Link>
+              <Link to="/grades" style={{ textDecoration: 'none', color: 'black' }}>
+                <MenuItem  onClick={handleCloseNavMenu}>
+                  <Typography textAlign="center">Grades</Typography>
+                </MenuItem>
+
+              </Link>
             </Menu>
           </Box>
           
@@ -125,7 +131,16 @@ const ResponsiveAppBar = () => {
               >
                 AddNewCourse
               </Button>
-        </Link>
+            </Link>
+            <Link to="/grades" style={{ textDecoration: 'none', color: 'white' }}> 
+              <Button
+              
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                Grades
+              </Button>
+            </Link>
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
