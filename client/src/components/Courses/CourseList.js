@@ -7,6 +7,7 @@ import Box from '@mui/material/Box';
 import classes from './CourseList.module.css';
 import { useNavigate } from 'react-router-dom';
 import CourseItem from './CourseItem';
+import { useAuth } from '../../lib/AuthContext';
 
 // const Item = styled(Paper)(({ theme }) => ({
 //   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#ddf',
@@ -22,26 +23,23 @@ function CourseList()
     
     const [listOfCourses, setListOfCourses] = useState([]);
     const navigate = useNavigate();
+    const { getCourses } = useAuth();
 
     useEffect(() =>
     {
         const getData = async () =>
         {
-            try
-            {
-                const response = await Axios.get("http://localhost:3001/courses");
-                setListOfCourses(response.data);
-                console.log(response.data);
-                // console.log(listOfCourses);
-                
-
-            } catch (err)
-            {
-                console.log("error ocuured while getting");
-            }
+            const response = await getCourses();
+            
+            console.log(response);
+            if (response.status === 'login')
+                navigate('/login');
+            else 
+                setListOfCourses(response);
+            
         }
         getData();
-    }, []);
+    }, [navigate,getCourses]);
 
     
     

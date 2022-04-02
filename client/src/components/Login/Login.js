@@ -8,7 +8,7 @@ function Login(props)
     
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-    const { loginUser } = useAuth();
+    const { loginUser,userInfo } = useAuth();
     const navigate = useNavigate();
 
 
@@ -38,10 +38,14 @@ function Login(props)
         {  setIsLoading(true);
             data = await loginUser(loginInfo);
             console.log(data);
+            console.log(userInfo);
+
              setIsLoading(false); 
+           
             if (data.status === 'ok')
             {
-                navigate('/courses');
+           
+                navigate('/home');
                 // redirect to home page
                 // toggleLoginModeHandler(); 
             }

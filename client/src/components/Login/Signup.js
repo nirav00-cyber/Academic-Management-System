@@ -33,10 +33,10 @@ function Signup(props)
         setIsLoading(true);
         const data = await registerUser(signupInfo);
         setIsLoading(false);
-        console.log(data);
+        console.log(data.status);
         if (data.status === 'ok')
         {
-            navigate('/courses');
+            navigate('/home');
             // redirect to home page
             // toggleLoginModeHandler(); 
         }
