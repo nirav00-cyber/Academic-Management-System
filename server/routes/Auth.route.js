@@ -42,7 +42,7 @@ AuthRouter.post('/loginUser', async (req, res) =>
     {
         res.status(400);
         throw new Error('Invalid credentials');
-        }
+    }
         // if (user)
         // {
         //     const token = jwt.sign({

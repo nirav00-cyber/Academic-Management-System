@@ -11,7 +11,9 @@ const cors = require('cors');
 app.use(express.json());
 app.use(cors());
 
-mongoose.connect("mongodb+srv://projectAms:ams123@cluster0.zwjrv.mongodb.net/AMS?retryWrites=true&w=majority"); //Paste mongo link inside
+mongoose.connect("mongodb+srv://projectAms:ams123@cluster0.zwjrv.mongodb.net/AMS?retryWrites=true&w=majority", ()=>{
+    console.log("connected");
+}); //Paste mongo link inside
 
 app.use('/courses', protect ,coursesRouter);
 app.use('/auth', AuthRouter);

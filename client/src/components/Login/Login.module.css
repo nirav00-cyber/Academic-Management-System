@@ -36,7 +36,7 @@ h2{
     margin-bottom: 5px;
 }
 
-.form_control input,textarea{
+.form_control input,textarea,select{
     border: 2px solid #f0f0f0;
     border-radius: 4px;
     display: block;
@@ -45,7 +45,7 @@ h2{
     font-size: 16px;
 }
 
-.form_control input:focus{
+.form_control input:focus,select:focus{
     outline:0;
     border-color: #3498db;
 }
@@ -53,6 +53,7 @@ h2{
     outline:0;
     border-color: #3498db;
 }
+
 .btn{
     cursor: pointer;
     background-color: #3498db;

@@ -22,8 +22,10 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    coursesTaken: [],
-    
+    coursesTaken: {
+        type: [],
+        required:true
+    }
 });
 
 const UserModel = mongoose.model("User", UserSchema);

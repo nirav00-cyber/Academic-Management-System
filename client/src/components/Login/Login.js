@@ -11,7 +11,7 @@ function Login(props)
     const { loginUser,userInfo } = useAuth();
     const navigate = useNavigate();
 
-
+    const loginAsRef = useRef();
     const emailRef = useRef();
     const passwordRef = useRef();
 
@@ -24,11 +24,12 @@ function Login(props)
     const submitHandler = async(e) =>
     {
         e.preventDefault();
-      
+        console.log(loginAsRef.current.value);
         const loginInfo = {
            
             email: emailRef.current.value,
-            password: passwordRef.current.value
+            password: passwordRef.current.value,
+            loginAs:loginAsRef.current.value
            
         };
 
@@ -69,7 +70,14 @@ function Login(props)
           {error && <div className={classes.error}>{error}</div>}
           
           <form onSubmit={submitHandler}>
-              
+              <div className={classes.form_control}>
+        <label htmlFor="loginAs">Login As</label>
+  <select id="loginAs" name="loginAs" ref={loginAsRef}>
+    <option value="student">Student</option>
+    <option value="admin">Admin</option>
+    <option value="faculty">Faculty</option>
+  </select>
+              </div>
                 <div className={classes.form_control}>
                     <label htmlFor='email'>Email</label>
                     <input

@@ -7,7 +7,7 @@ function Signup(props)
 
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-
+    const signupAsRef = useRef();
     const nameRef = useRef();
     const emailRef = useRef();
     const passwordRef = useRef();
@@ -26,7 +26,9 @@ function Signup(props)
             email: emailRef.current.value,
             password: passwordRef.current.value,
             contactNumber: contactNumberRef.current.value,
-            address:addressRef.current.value
+            address: addressRef.current.value,
+            signupAs:signupAsRef.current.value,
+            
         };
 
         console.log("request made");
@@ -56,6 +58,14 @@ function Signup(props)
           {error && <div className={classes.error}>{error}</div>}
           
           <form onSubmit={submitHandler}>
+              <div className={classes.form_control}>
+        <label htmlFor="signupAs">Login As</label>
+  <select id="signupAs" name="signupAs" ref={signupAsRef}>
+    <option value="student">Student</option>
+    <option value="admin">Admin</option>
+    <option value="faculty">Faculty</option>
+  </select>
+              </div>
                <div className={classes.form_control}>
                     <label htmlFor='name'>Name</label>
                     <input

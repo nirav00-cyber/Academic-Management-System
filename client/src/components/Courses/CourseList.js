@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useRef,useEffect, useState } from 'react';
 import Axios from "axios";
 import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
@@ -23,25 +23,29 @@ function CourseList()
     
     const [listOfCourses, setListOfCourses] = useState([]);
     const navigate = useNavigate();
-    const { getCourses } = useAuth();
-
+    const { config } = useAuth();
+    
     useEffect(() =>
     {
         const getData = async () =>
+        {   
+        try
         {
-            const response = await getCourses();
-            
-            console.log(response);
-            if (response.status === 'login')
-                navigate('/login');
-            else 
-                setListOfCourses(response);
-            
-        }
-        getData();
-    }, [navigate,getCourses]);
+            const response = await Axios.get('http://localhost:3001/courses', config);
+            setListOfCourses(response.data);
+            console.log(response.data);
 
-    
+        } catch (err)
+        {
+            console.log(err);
+        
+        }    
+    }
+        
+        getData();
+
+    }, [config]);
+
     
     return (
         <div className={classes.container}>
@@ -49,7 +53,7 @@ function CourseList()
         <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
         {listOfCourses.map((course) =>
             (
-            <CourseItem key={course._id} cid={course._id} course_name={course.course_name}></CourseItem>
+            <CourseItem key={course._id} cid={course._id} course_name={course.course_name} courseInfo={course} ></CourseItem>
 
         ))}
             </Grid>

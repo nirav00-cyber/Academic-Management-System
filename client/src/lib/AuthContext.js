@@ -2,7 +2,6 @@ import React,{useContext,useEffect,useState} from 'react';
 import Axios from 'axios';
 
 
-
 const AuthContext = React.createContext();
 
 export function useAuth()
@@ -76,23 +75,22 @@ export function AuthProvider(props)
     }
     async function getCourses()
     {
-        let response = {};
         try
         {
-            response = await Axios.get("http://localhost:3001/courses", config);
+            const response = await Axios.get("http://localhost:3001/courses", config);
             console.log(response);
             return response.data;
 
         } catch (err)
         {
-            console.log(err.response.status)
+            // console.log(err.response.status)
             if (err.response.status === 401)
                 return { status: 'login' };
             return { status: 'error' };
         }
 
     }
-
+   
 
  const value = {
      registerUser,
@@ -100,7 +98,7 @@ export function AuthProvider(props)
      userInfo,
      logout,
      addCourse,
-     getCourses
+     config
     }
 
     return (

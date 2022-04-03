@@ -8,3 +8,14 @@
 .buttonContainer div{
     margin: 7px;
 }
+
+.enrollButton{
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    padding: 20px;
+    color: antiquewhite;
+
+}

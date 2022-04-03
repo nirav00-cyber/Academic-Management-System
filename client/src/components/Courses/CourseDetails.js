@@ -3,12 +3,18 @@ import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import CssBaseline from '@mui/material/CssBaseline';
+import Typography from '@mui/material/Typography';
+
 import Grid from '@mui/material/Grid';
-import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
+
 import classes from "./CourseDetails.module.css";
 import Axios from "axios";
-import { useSearchParams,useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { useAuth } from '../../lib/AuthContext';
+
+import MoreDetails from './MoreDetails';
+
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1dfge2' : '#ffc',
@@ -21,57 +27,50 @@ const Item = styled(Paper)(({ theme }) => ({
     height:200
 }));
 
-const dummy = {
-    course_name: "xyz",
-    faculty_name: "abc",
-    students: ["1", "2", "3", "4"],
-    announcements:["ac1","ac2","ac2"]
-}
 
 function CourseDetails()
 {
  
-    const { courseId } = useParams();
-    const [course, setCourse] = useState([]);
-
+  const [course, setCourse] = useState([]);
+  const { courseId } = useParams();
+  const { userInfo, config } = useAuth();
+  const [isEnrolled, setIsEnrolled] = useState(false);
+  const [isApproving, setIsApproving] = useState(false);
     useEffect(() =>
     {
         const getData = async () =>
+        {   
+        try
         {
-            try
-            {
-                // console.log(courseId);
-                const response = await Axios.get(`http://localhost:3001/courses/${ courseId }`);
-                
-                setCourse(response.data);
-                console.log(response.data);
-                // console.log(listOfCourses);
-                
+            const response = await Axios.get(`http://localhost:3001/courses/${ courseId }`, config);
+            setCourse(response.data);
+          console.log(response.data);
+          if (userInfo.coursesTaken && userInfo.coursesTaken.find(courseId))
+            setIsEnrolled(true);
+          if (userInfo.coursesPending &&
+            userInfo.coursesPending.find(courseId))
+            setIsApproving(true);
+            // return response.data;
+        } catch (err)
+        {
+            console.log(err);
 
-            } catch (err)
-            {
-                console.log("error ocuured while getting");
-            }
-        }
+        }    
+    }
+
         getData();
 
-    }, [courseId]);
+    }, [courseId,config,userInfo]);
 
-    // const addCourseDetails = async () =>
-    // {
-    //     try
-    //     {
-    //         const response = await Axios.post("http://localhost:3001/courses", dummy);
-    //         console.log(response);
-    //     }
-    //     catch (err)
-    //     {
-    //         console.log("error Occured while posting data");
-    //     } 
-    // }
-    // console.log(courses[0].course_name, "ye");
-    // addCourseDetails();
-    console.log(course);
+
+  console.log(course);
+  console.log(userInfo);
+  const enrollToCourse = () =>
+  {
+    setIsApproving(true);
+    //  also store it into the database of the course that student is waiting for the approval and 
+    // store it in students pending courses for approval
+  }
     return (
     <div className='container'>
     <Box sx={{ flexGrow: 1}}>
@@ -81,24 +80,35 @@ function CourseDetails()
                             <div>
                                 {course.course_name}
                             </div>                  {course.faculty_name}                               <div>
-                                {/* {courses[0].faculty_name} */}
-                            </div>
-                        </Item>
+                            {course.description}
+                </div>
+                
+              </Item>
+              
         </Grid>
         <Grid item xs={5}>
           <Item>Attee Data</Item>
         </Grid>
       </Grid>
-    </Box>
+        </Box>
+        
         <CssBaseline />
-        <div className={classes.buttonContainer}>
-                <Button variant="text">Students</Button>
-                <div>|</div>
-<Button variant="text">Announcements</Button>
-</div>
-      <Container maxWidth="md">
-        <Box sx={{ bgcolor: '#cfe8fc', height: '100vh' }} />
-      </Container>
+        {!isEnrolled && !isApproving && 
+          <div className={classes.enrollButton}>
+            <Button variant='contained' onClick={enrollToCourse} >Enroll</Button>
+            </div>
+        }
+        {
+          isApproving && <div className={classes.enrollButton}>
+            <Typography variant='h6' color='blue'>
+              Enrolled !
+             waiting for the Approval from Faculty 
+            </Typography>
+          </div>
+        }
+        {isEnrolled && 
+          <MoreDetails />
+        }
             </div>
   )
 }
