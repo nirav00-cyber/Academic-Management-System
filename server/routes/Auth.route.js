@@ -40,8 +40,9 @@ AuthRouter.post('/loginUser', async (req, res) =>
         })    
     } else 
     {
-        res.status(400);
-        throw new Error('Invalid credentials');
+        res.json({status:'error',error:'Invalid Crendentials or User not Exist'});
+
+        // throw new Error('Invalid credentials');
     }
         // if (user)
         // {
@@ -58,6 +59,33 @@ AuthRouter.post('/loginUser', async (req, res) =>
         // }
 
     
+})
+
+AuthRouter.post('/addToCoursesTaken', async (req, res) =>
+{
+    const details = req.body;
+    const courseId = details.courseId;
+    const studentId = details.studentId;
+
+    
+    UserModel.findByIdAndUpdate(studentId,
+        {
+            $push: {
+                "coursesTaken": 
+                    courseId
+            }        
+        },
+        {
+            safe: true, upsert: true
+        },
+        function(err, model) {
+         if(err){
+        	console.log(err);
+        	return res.send(err);
+         }
+          return res.json(model);
+        }
+    ) 
 })
 
 AuthRouter.post('/registerUser', async(req, res) =>
@@ -89,6 +117,26 @@ AuthRouter.post('/registerUser', async(req, res) =>
     
     // res.json(details);
 });
+
+AuthRouter.post('/getUserInfo', async (req, res) =>
+{
+
+
+    const userId = req.body.userId;
+    UserModel.findById(userId, (err, result) =>
+    {
+        console.log(userId);   
+        if (err)
+        {
+            res.json(err);
+        }
+        else 
+        {
+            res.json(result);
+        }
+    });
+    
+})
 
 const generateToken = (id) =>
 {

@@ -4,8 +4,6 @@ import { useAuth } from '../../lib/AuthContext';
 import { useNavigate } from 'react-router-dom';
 function Login(props)
 {
-
-    
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const { loginUser,userInfo } = useAuth();

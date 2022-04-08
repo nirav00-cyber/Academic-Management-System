@@ -13,8 +13,53 @@ const CourseSchema = new mongoose.Schema({
         type: String,
         required:true
     },
-    students: [],
-    announcements: []
+    students: [
+        {
+            id: {
+                type: String,
+                required: true
+            },
+            name: {
+                type: String,
+                required: true
+            },
+            email: {
+                type: String,
+                required: true
+            },
+            contactNumber: {
+                type: String,
+            }
+        }
+   ],
+    announcements: [
+        {
+            text: {
+                type: String,
+                required:true
+            }
+        }
+    ],
+    enrollmentReqs: [
+        {
+            id: {
+                type: String,
+                required: true,
+                unique:true
+            },
+            name: {
+                type: String,
+                required:true
+            },
+            email: {
+                type: String,
+                required:true
+            },
+            contactNumber: {
+                type: String,
+            }
+        }
+    ],
 
 });
 

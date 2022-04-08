@@ -27,7 +27,7 @@ function Signup(props)
             password: passwordRef.current.value,
             contactNumber: contactNumberRef.current.value,
             address: addressRef.current.value,
-            signupAs:signupAsRef.current.value,
+            role:signupAsRef.current.value,
             
         };
 
@@ -35,10 +35,10 @@ function Signup(props)
         setIsLoading(true);
         const data = await registerUser(signupInfo);
         setIsLoading(false);
-        console.log(data.status);
+        console.log(data);
         if (data.status === 'ok')
         {
-            navigate('/home');
+            navigate('/login');
             // redirect to home page
             // toggleLoginModeHandler(); 
         }

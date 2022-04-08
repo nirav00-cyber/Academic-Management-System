@@ -38,10 +38,13 @@ coursesRouter.get('/:courseId', (req, res) =>
             res.json(result);
         }
     });
+    
 })
 
 
-coursesRouter.post('/addNewCourse', async(req, res) =>
+
+
+coursesRouter.post('/', async(req, res) =>
 {
     try
     {
@@ -56,6 +59,69 @@ coursesRouter.post('/addNewCourse', async(req, res) =>
     }
 });
 
+coursesRouter.post('/addEnrollmentReq', async(req, res) =>
+{
 
+    const details = req.body;
+    const courseId = details.courseId;
+    console.log(details);
+    const enrollmentData = {
+        name: details.name,
+        email: details.email,
+        id: details.id,
+        contactNumber:details.contactNumber
+    }
+    CourseModel.findByIdAndUpdate(courseId,
+        {
+            $push: { "enrollmentReqs": enrollmentData }
+        },
+        {
+            safe: true, upsert: true
+        },
+        function(err, model) {
+         if(err){
+        	console.log(err);
+        	return res.send(err);
+         }
+          return res.json(model);
+        }
+    )
+});
+
+coursesRouter.post('/removeEnrollmentReq', async(req, res) =>
+{
+
+    const details = req.body;
+    const courseId = details.courseId;
+    const studentData = details.studentData;
+    const studentId = details.studentData.id;
+console.log("from the backend")
+    
+    CourseModel.findByIdAndUpdate(courseId,
+        {
+            $pull: {
+                "enrollmentReqs": {
+                    id: studentId
+                }
+            },
+            $push: {
+                "students": 
+                    studentData
+            }
+        
+        },
+        {
+            safe: true, upsert: true
+        },
+        function(err, model) {
+         if(err){
+        	console.log(err);
+        	return res.send(err);
+         }
+          return res.json(model);
+        }
+    ) 
+    
+});
 
 module.exports = coursesRouter;

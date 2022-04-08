@@ -23,8 +23,8 @@ function CourseList()
     
     const [listOfCourses, setListOfCourses] = useState([]);
     const navigate = useNavigate();
-    const { config } = useAuth();
-    
+    const { config,userInfo } = useAuth();
+    console.log(config,userInfo);
     useEffect(() =>
     {
         const getData = async () =>
@@ -33,7 +33,7 @@ function CourseList()
         {
             const response = await Axios.get('http://localhost:3001/courses', config);
             setListOfCourses(response.data);
-            console.log(response.data);
+            
 
         } catch (err)
         {

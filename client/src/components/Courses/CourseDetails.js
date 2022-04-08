@@ -33,20 +33,33 @@ function CourseDetails()
  
   const [course, setCourse] = useState([]);
   const { courseId } = useParams();
-  const { userInfo, config } = useAuth();
-  const [isEnrolled, setIsEnrolled] = useState(false);
+  const { userInfo, config,addEnrollReq,updateUserInfo } = useAuth();
+  const [isEnrolled, setIsEnrolled] = useState(false)
   const [isApproving, setIsApproving] = useState(false);
+
     useEffect(() =>
     {
+      console.log(userInfo);
         const getData = async () =>
-        {   
+        {
+          
         try
         {
-            const response = await Axios.get(`http://localhost:3001/courses/${ courseId }`, config);
+          const updatedUserData = await updateUserInfo(userInfo.userInfo._id);
+          
+          const response = await Axios.get(`http://localhost:3001/courses/${ courseId }`, config);
+        
             setCourse(response.data);
           console.log(response.data);
-          if (userInfo.coursesTaken && userInfo.coursesTaken.find(courseId))
+          const coursesTakenArray = updatedUserData.coursesTaken;
+          
+          console.log(userInfo);
+          if (userInfo.userInfo.role === 'faculty' || (coursesTakenArray && coursesTakenArray.find((cId) => cId===courseId)))
+          {
+            console.log("it ran");
             setIsEnrolled(true);
+          
+          }
           if (userInfo.coursesPending &&
             userInfo.coursesPending.find(courseId))
             setIsApproving(true);
@@ -57,17 +70,33 @@ function CourseDetails()
 
         }    
     }
-
         getData();
-
-    }, [courseId,config,userInfo]);
+    }, [courseId,config,userInfo,updateUserInfo]);
 
 
   console.log(course);
   console.log(userInfo);
-  const enrollToCourse = () =>
+  const enrollToCourse = async() =>
   {
     setIsApproving(true);
+    const enrollmentData = {
+      courseId:courseId,
+      id: userInfo.userInfo._id,
+      name: userInfo.userInfo.name,
+      email: userInfo.userInfo.email,
+      contactNumber:userInfo.userInfo.contactNumber
+    }
+    try
+    {
+      console.log(enrollmentData);
+      const response = await addEnrollReq(enrollmentData);
+    console.log(response);
+
+    } catch (err)
+    {
+      console.log(err); 
+    }
+
     //  also store it into the database of the course that student is waiting for the approval and 
     // store it in students pending courses for approval
   }
@@ -93,7 +122,7 @@ function CourseDetails()
         </Box>
         
         <CssBaseline />
-        {!isEnrolled && !isApproving && 
+        {!isEnrolled && !isApproving &&  
           <div className={classes.enrollButton}>
             <Button variant='contained' onClick={enrollToCourse} >Enroll</Button>
             </div>
@@ -106,8 +135,10 @@ function CourseDetails()
             </Typography>
           </div>
         }
-        {isEnrolled && 
-          <MoreDetails />
+
+        {isEnrolled &&  
+          
+          <MoreDetails courseId={courseId} />
         }
             </div>
   )
