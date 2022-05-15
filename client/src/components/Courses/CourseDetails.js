@@ -101,10 +101,11 @@ function CourseDetails()
     // store it in students pending courses for approval
   }
     return (
-    <div className='container'>
+      <div className={classes.container}>
+        <div className={classes.course_container}>
     <Box sx={{ flexGrow: 1}}>
-      <Grid container spacing={0}>
-        <Grid item xs={7}>
+      <Grid container spacing={1}>
+        <Grid item xs={12}>
                         <Item>
                             <div>
                                 {course.course_name}
@@ -115,12 +116,12 @@ function CourseDetails()
               </Item>
               
         </Grid>
-        <Grid item xs={5}>
+        {/* <Grid item xs={5}>
           <Item>Attee Data</Item>
-        </Grid>
+        </Grid> */}
       </Grid>
         </Box>
-        
+        </div>
         <CssBaseline />
         {!isEnrolled && !isApproving &&  
           <div className={classes.enrollButton}>

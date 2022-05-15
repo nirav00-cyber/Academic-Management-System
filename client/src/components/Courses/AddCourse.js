@@ -16,8 +16,10 @@ function AddCourse()
             course_name: courseInputRef.current.value,
             faculty_name: facultyInputRef.current.value,
             description:courseDescInputRef.current.value,
-            students: [1, 2, 3, 4],
-            announcements: ["arg", "aweg", "egr"]
+            students: [],
+            announcements: [],
+            enrollmentReqs: []
+            
         };
         const response = await addCourse(courseData);
         console.log(response);

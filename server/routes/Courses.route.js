@@ -44,7 +44,7 @@ coursesRouter.get('/:courseId', (req, res) =>
 
 
 
-coursesRouter.post('/', async(req, res) =>
+coursesRouter.post('/addNewCourse', async(req, res) =>
 {
     try
     {
@@ -55,6 +55,7 @@ coursesRouter.post('/', async(req, res) =>
     }
     catch (err)
     {
+        console.log(err);
         res.json({ status: "error", error: err });
     }
 });
